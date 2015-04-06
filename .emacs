@@ -1,15 +1,17 @@
 (require 'package)
-(add-to-list 'package-archives
-    '("marmalade" .
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  (add-to-list 'package-archives '("marmalade" .
       "http://marmalade-repo.org/packages/"))
-(package-initialize)
+  )
 (add-to-list 'load-path "/Users/rmorello/.emacs.d/")
 (add-to-list 'load-path "/Users/rmorello/.emacs.d/vendor/")
 (add-to-list 'load-path "/Users/rmorello/.emacs.d/git-emacs/")
 (add-to-list 'load-path "/Users/rmorello/.emacs.d/markdown-mode/")
-(require 'minitest)
-(require 'git-emacs)
-(require 'git-blame)
+;(require 'git-emacs)
+;(require 'git-blame)
 (autoload 'markdown-mode "markdown-mode"
    "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -18,6 +20,17 @@
 (load "/Users/rmorello/.emacs.d/emacs-xkcd.el")
 (global-set-key (kbd "M-/") 'hippie-expand)
 (set-default 'cursor-type 'box)
+
+(add-to-list 'load-path
+              "~/.emacs.d/yasnippet")
+(require 'yasnippet)
+(yas-global-mode 1)
+
+(setq yas-snippet-dirs
+      '("~/.emacs.d/snippets"                 ;; personal snippets
+        "~/.emacs.d/yasnippet/snippets"         ;; the default collection
+        ))
+
 ; make carriage returns blue and tabs green
 (custom-set-faces
  '(my-carriage-return-face ((((class color)) (:background "blue"))) t)
