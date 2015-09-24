@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/rmorello/.oh-my-zsh
+export ZSH=/home/vagrant/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -9,6 +9,10 @@ ZSH_THEME="robbyrussell"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -45,14 +49,16 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ruby brew rails)
+plugins=(git git-extras rails)
 
 # User configuration
 
-export PATH="$HOME/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/texbin"
+# export PATH="/home/vagrant/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+export PATH=/usr/local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin;
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
-eval "$(rbenv init -)"
 source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
@@ -79,3 +85,26 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# source ".sshagentrc" if present
+SSHAGENTRC_FILE=$HOME/.sshagentrc;
+if [ -f $SSHAGENTRC_FILE ]; then
+  source $SSHAGENTRC_FILE;
+fi
+
+# Load any custom init-scripts (the filename *must* end-with "rc")
+CUSTOM_INIT_SCRIPTS_DIRECTORY=$HOME/.home_dir/custom;
+if [ -d $CUSTOM_INIT_SCRIPTS_DIRECTORY ]; then
+  for f in `find "$CUSTOM_INIT_SCRIPTS_DIRECTORY" -type f -o -type l | \grep "rc$"`; do
+    source $f;
+  done
+fi
+
+# If it exists, load RVM (it *must* be initialized last)
+RVM_SCRIPT=$HOME/.rvm/scripts/rvm;
+if [ -f $RVM_SCRIPT ]; then
+  source $RVM_SCRIPT;
+fi
+
+# For Zeus
+export DOT_FILES_LOCATION=~
