@@ -70,12 +70,21 @@
   )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 
+(global-set-key (kbd "C-x g") 'magit-status)
+
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+; (load-theme 'solarized t)
+
 ; (server-start)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" default)))
  '(evernote-developer-token
    "S=s10:U=11d8d5:E=15684551542:C=14f2ca3e658:P=1cd:A=en-devtoken:V=2:H=bcb930291dbf38a74ede0c66050c4552")
  '(evernote-password-cache t)
