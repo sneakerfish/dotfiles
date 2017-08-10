@@ -1,94 +1,76 @@
-;; Use Emacs terminfo, not system terminfo
-(setq system-uses-terminfo nil)
-
 (require 'package)
-;;(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-;;                         ("marmalade" . "https://marmalade-repo.org/packages/")
-;;                         ("melpa" . "http://melpa.org/packages/")))
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(setq exec-path (cons (expand-file-name "~/.rvm/gems/ruby-2.1.5@sermo/bin") exec-path))
-
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
-(autoload 'scss-mode "scss-mode")
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
-
-(setq c-basic-offset 4)
-(setq-default tab-width 2)
-(setq-default indent-tabs-mode nil)
-(setq js-indent-level 2)
-(setq scss-indent-level 2)
-(setq require-final-newline t)
-
-(require 'column-marker)
-(require 'package)
-(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
-(require 'ag)
-(require 'ido)
-(ido-mode t)
-(setq column-number-mode t)
-(setq undo-outer-limit 20000000)
+
+(require 'helm)
 (require 'helm-config)
 
-(setq org-log-done 'time)
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(when (executable-find "ack-grep")
+  (setq helm-grep-default-command "ack-grep -Hn --no-group --no-color %e %p %f"
+     helm-grep-default-recurse-command "ack-grep -H --no-group --no-color %e %p %f"))
 
-(require 'evernote-mode)
-(setq browse-url-browser-function 'w3m-browse-url)
-(autoload 'w3m-browse-url "w3m" "Ask a WWW browser to show a URL." t)
-;; optional keyboard short-cut
-(global-set-key "\C-xm" 'browse-url-at-point)
-(setq w3m-use-cookies t)
 
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
-(add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
-(add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
-(defun my-web-mode-hook ()
-  "Hooks for Web mode."
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-script-padding 2)
-  (c-set-offset 'arglist-intro '+)
-  (c-set-offset 'arglist-close 0)
-  (js-set-offset 'arglist-intro '+)
-  (js-set-offset 'arglist-close 0)
-  (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
-  (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil))
-  (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
-  )
-(add-hook 'web-mode-hook 'my-web-mode-hook)
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
 
-(global-set-key (kbd "C-x g") 'magit-status)
+(setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+      helm-ff-file-name-history-use-recentf t
+      helm-echo-input-in-header-line t)
 
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(defun spacemacs//helm-hide-minibuffer-maybe ()
+  "Hide minibuffer in Helm session if we use the header line as input field."
+  (when (with-helm-buffer helm-echo-input-in-header-line)
+    (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+      (overlay-put ov 'window (selected-window))
+      (overlay-put ov 'face
+                   (let ((bg-color (face-background 'default nil)))
+                     `(:background ,bg-color :foreground ,bg-color)))
+      (setq-local cursor-type nil))))
 
-; (load-theme 'solarized t)
 
-; (server-start)
+(add-hook 'helm-minibuffer-set-up-hook
+          'spacemacs//helm-hide-minibuffer-maybe)
+
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 20)
+
+
+(add-hook 'find-file-hook 'whitespace-mode)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+ ;; transform literal tabs into a right-pointing triangle
+(setq
+ whitespace-display-mappings ;http://ergoemacs.org/emacs/whitespace-mode.html
+ '(
+   (tab-mark 9 [9654 9] [92 9])
+                                        ;others substitutions...
+   ))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
+ '(package-selected-packages
    (quote
-    ("8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" default)))
- '(evernote-developer-token
-   "S=s10:U=11d8d5:E=15684551542:C=14f2ca3e658:P=1cd:A=en-devtoken:V=2:H=bcb930291dbf38a74ede0c66050c4552")
- '(evernote-password-cache t)
- '(evernote-username "rmorello"))
+    (codesearch helm-codesearch multi-web-mode helm-rails magit minitest git-blame dired+))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
