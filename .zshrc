@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/home/vagrant/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -105,6 +105,8 @@ RVM_SCRIPT=$HOME/.rvm/scripts/rvm;
 if [ -f $RVM_SCRIPT ]; then
   source $RVM_SCRIPT;
 fi
+
+fpath=(/usr/local/share/zsh-completions $fpath)
 
 # For Zeus
 export DOT_FILES_LOCATION=~
