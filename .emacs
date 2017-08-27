@@ -6,6 +6,8 @@
 
 (require 'helm)
 (require 'helm-config)
+(require 'projectile)
+(require 'helm-projectile)
 
 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
 ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
@@ -24,6 +26,10 @@
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
 (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+(projectile-mode)
+(setq project-completion-system 'helm)
+(helm-projectile-on)
 
 (when (executable-find "curl")
   (setq helm-google-suggest-use-curl-p t))
@@ -52,17 +58,8 @@
 (setq helm-autoresize-max-height 0)
 (setq helm-autoresize-min-height 20)
 
-
-(add-hook 'find-file-hook 'whitespace-mode)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
- ;; transform literal tabs into a right-pointing triangle
-(setq
- whitespace-display-mappings ;http://ergoemacs.org/emacs/whitespace-mode.html
- '(
-   (tab-mark 9 [9654 9] [92 9])
-                                        ;others substitutions...
-   ))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -77,3 +74,17 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(global-set-key (kbd "C-x g") 'magit-status)
+
+ (defun writeroom ()
+  "Switches to a WriteRoom-like fullscreen style"
+  (interactive)
+  (when (featurep 'aquamacs)
+    ;; switch to white on black
+    (color-theme-initialize)
+    (color-theme-clarity)
+    ;; switch to Garamond 36pt
+    (aquamacs-autoface-mode 0)
+    (set-frame-font "-apple-garamond-medium-r-normal--36-360-72-72-m-360-iso10646-1")
+    ;; switch to fullscreen mode
+    (aquamacs-toggle-full-frame)))
