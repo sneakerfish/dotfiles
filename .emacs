@@ -60,37 +60,7 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" default)))
- '(package-selected-packages
-   (quote
-    (helm-org-rifle codesearch helm-codesearch multi-web-mode helm-rails magit minitest git-blame dired+))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(helm-selection ((t (:background "green" :distant-foreground "white")))))
 (global-set-key (kbd "C-x g") 'magit-status)
-
- (defun writeroom ()
-  "Switches to a WriteRoom-like fullscreen style"
-  (interactive)
-  (when (featurep 'aquamacs)
-    ;; switch to white on black
-    (color-theme-initialize)
-    (color-theme-clarity)
-    ;; switch to Garamond 36pt
-    (aquamacs-autoface-mode 0)
-    (set-frame-font "-apple-garamond-medium-r-normal--36-360-72-72-m-360-iso10646-1")
-    ;; switch to fullscreen mode
-    (aquamacs-toggle-full-frame)))
 
 (global-set-key (kbd "C-c o")
 		(lambda () (interactive) (find-file "~/Dropbox/notes.org")))
