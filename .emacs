@@ -10,6 +10,9 @@
 (require 'helm-projectile)
 (require 'poly-R)
 (require 'poly-markdown)
+(autoload 'r-mode "ess-site.el" "Major mode for editing R source." t)
+(setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+(setq exec-path (append exec-path '("/usr/local/bin")))
 
 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
 ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
@@ -30,6 +33,8 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
+
+(add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
 
 (desktop-save-mode 1)
 
@@ -123,9 +128,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(package-selected-packages
    (quote
-    (ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch))))
+    (rjsx-mode ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
