@@ -14,10 +14,17 @@
 ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
 (global-set-key (kbd "C-c h") 'helm-command-prefix)
 (global-unset-key (kbd "C-x c"))
+;; Magit rules!
+(global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+
+(global-set-key (kbd "C-c o")
+		(lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
+
 (when (executable-find "ack-grep")
   (setq helm-grep-default-command "ack-grep -Hn --no-group --no-color %e %p %f"
      helm-grep-default-recurse-command "ack-grep -H --no-group --no-color %e %p %f"))
@@ -59,8 +66,3 @@
 (setq helm-autoresize-min-height 20)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(global-set-key (kbd "C-x g") 'magit-status)
-
-(global-set-key (kbd "C-c o")
-		(lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
