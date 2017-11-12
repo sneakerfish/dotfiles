@@ -63,4 +63,4 @@
 (global-set-key (kbd "C-x g") 'magit-status)
 
 (global-set-key (kbd "C-c o")
-		(lambda () (interactive) (find-file "~/Dropbox/notes.org")))
+		(lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
