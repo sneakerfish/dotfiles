@@ -24,6 +24,13 @@
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-c o")
 		(lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
+
+;; Org mode stuff: ;; The following lines are always needed.  Choose your own keys.
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+
 (desktop-save-mode 1)
 
 (when (executable-find "ack-grep")
@@ -67,3 +74,61 @@
 (setq helm-autoresize-min-height 20)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Org-mode stuff -- RPM 12-Nov-2017
+;; set the fall-back font
+
+;; this is critical for displaying various unicode symbols, such as
+;; those used in my init-org.el settings
+;; http://endlessparentheses.com/manually-choose-a-fallback-font-for-unicode.html
+(set-fontset-font "fontset-default" nil
+                  (font-spec :size 20 :name "Symbola"))
+
+;; Setting English Font
+(add-hook 'org-mode-hook
+          (lambda () (face-remap-add-relative 'default :family "DejaVu Sans Mono for Powerline")))
+
+;; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
+(setq utf-translate-cjk-mode nil)
+
+(set-language-environment 'utf-8)
+(setq locale-coding-system 'utf-8)
+
+;; set the default encoding system
+(prefer-coding-system 'utf-8)
+(setq default-file-name-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+;; backwards compatibility as default-buffer-file-coding-system
+;; is deprecated in 23.2.
+(if (boundp buffer-file-coding-system)
+    (setq buffer-file-coding-system 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8))
+
+;; Treat clipboard input as UTF-8 string first; compound text next, etc.
+(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+
+;; use org-bullets-mode for utf8 symbols as org bullets
+(require 'org-bullets)
+;; make available "org-bullet-face" such that I can control the font size individually
+(setq org-bullets-face-name (quote org-bullet-face))
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(setq org-bullets-bullet-list '("✙" "♱" "♰" "☥" "✞" "✟" "✝" "†" "✠" "✚" "✜" "✛" "✢" "✣" "✤" "✥"))
+
+(global-set-key (kbd "C-c o")
+                (lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
