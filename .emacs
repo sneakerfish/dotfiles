@@ -8,6 +8,8 @@
 (require 'helm-config)
 (require 'projectile)
 (require 'helm-projectile)
+(require 'poly-R)
+(require 'poly-markdown)
 
 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
 ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
@@ -20,10 +22,9 @@
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
-
-
 (global-set-key (kbd "C-c o")
 		(lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
+(desktop-save-mode 1)
 
 (when (executable-find "ack-grep")
   (setq helm-grep-default-command "ack-grep -Hn --no-group --no-color %e %p %f"
