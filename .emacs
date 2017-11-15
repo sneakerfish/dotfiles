@@ -21,10 +21,24 @@
 (global-unset-key (kbd "C-x c"))
 ;; Magit rules!
 (global-set-key (kbd "C-x g") 'magit-status)
+;; remap common functions to helm equivalent
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
+
+;; make cursor movement keys under right hand's home-row.
+(global-set-key (kbd "M-j") 'backward-char) ; was indent-new-comment-line
+(global-set-key (kbd "M-l") 'forward-char)  ; was downcase-word
+(global-set-key (kbd "C-M-j") 'backward-word)
+(global-set-key (kbd "C-M-l") 'forward-word)
+(global-set-key (kbd "M-i") 'previous-line) ; was tab-to-tab-stop
+(global-set-key (kbd "M-k") 'next-line) ; was kill-sentence
+
+(global-set-key (kbd "M-SPC") 'set-mark-command) ; was just-one-space
+(global-set-key (kbd "M-a") 'execute-extended-command) ; was backward-sentence
+
+;; Set a single command to go to the default org file.
 (global-set-key (kbd "C-c o")
 		(lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
 
