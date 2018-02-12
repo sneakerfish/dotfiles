@@ -3,13 +3,40 @@
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
+(setq user-emacs-directory "~/.emacs.d")
 
 (require 'helm)
 (require 'helm-config)
 (require 'projectile)
 (require 'helm-projectile)
+(require 'web-mode)
 (require 'poly-R)
 (require 'poly-markdown)
+(require 'ng2-mode)
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  (company-mode +1))
+
+(when (string= system-type "darwin")
+  (setq dired-use-ls-dired nil))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
 (autoload 'r-mode "ess-site.el" "Major mode for editing R source." t)
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
 (setq exec-path (append exec-path '("/usr/local/bin")))
@@ -50,7 +77,23 @@
 
 (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
 
+(load "~/.emacs.d/my-abbrev.el")
+
 (desktop-save-mode 1)
+
+(defun my-setup-indent (n)
+  ;; java/c/c++
+  (setq-local c-basic-offset n)
+  ;; web development
+  (setq-local coffee-tab-width n) ; coffeescript
+  (setq-local javascript-indent-level n) ; javascript-mode
+  (setq-local js-indent-level n) ; js-mode
+  (setq-local js2-basic-offset n) ; js2-mode, in latest js2-mode, it's alias of js-indent-level
+  (setq-local web-mode-markup-indent-offset n) ; web-mode, html tag in html file
+  (setq-local web-mode-css-indent-offset n) ; web-mode, css in html file
+  (setq-local web-mode-code-indent-offset n) ; web-mode, js code in html file
+  (setq-local css-indent-offset n) ; css-mode
+  )
 
 (when (executable-find "ack-grep")
   (setq helm-grep-default-command "ack-grep -Hn --no-group --no-color %e %p %f"
@@ -137,15 +180,27 @@
 
 (global-set-key (kbd "C-c o")
                 (lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
+
+;; Indentation
+(setq-default indent-tabs-mode nil)
+(setq tab-width 2)
+(defvaralias `c-basic-offset `tab-width)
+(defvaralias `cperl-indent-level `tab-width)
+(my-setup-indent 2)
+(setq css-indent-offset 2)
+
+(add-hook `scss-mode-hook (my-setup-indent 2))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
+ '(org-agenda-files (quote ("~/intrepid/docs/apprentice/diary.org")))
  '(package-selected-packages
    (quote
-    (helm-ag rjsx-mode ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch))))
+    (go-mode go-scratch go-snippets go-stacktracer tide flycheck company web-mode ng2-mode editorconfig markdown-mode typescript-mode helm-ag rjsx-mode ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
