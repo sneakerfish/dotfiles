@@ -5,6 +5,7 @@
 (package-initialize)
 (setq user-emacs-directory "~/.emacs.d")
 
+(require 'flycheck)
 (require 'helm)
 (require 'helm-config)
 (require 'projectile)
@@ -13,6 +14,7 @@
 (require 'poly-R)
 (require 'poly-markdown)
 (require 'ng2-mode)
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 (defun setup-tide-mode ()
   (interactive)
@@ -200,7 +202,7 @@
  '(org-agenda-files (quote ("~/intrepid/docs/apprentice/diary.org")))
  '(package-selected-packages
    (quote
-    (go-mode go-scratch go-snippets go-stacktracer tide flycheck company web-mode ng2-mode editorconfig markdown-mode typescript-mode helm-ag rjsx-mode ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch))))
+    (exec-path-from-shell js2-mode go-mode go-scratch go-snippets go-stacktracer tide flycheck company web-mode ng2-mode editorconfig markdown-mode typescript-mode helm-ag rjsx-mode ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
