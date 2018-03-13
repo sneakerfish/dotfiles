@@ -1,4 +1,10 @@
+;;; emacs -- dotfile for emacs
+
+;;; Commentary:
+
 (require 'package)
+
+;;; Code:
 
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
@@ -40,7 +46,7 @@
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 (autoload 'r-mode "ess-site.el" "Major mode for editing R source." t)
-(setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+(setenv "PATH" (concat "~/.asdf/shims:" (getenv "PATH") ":/usr/local/bin"))
 (setq exec-path (append exec-path '("/usr/local/bin")))
 
 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
@@ -168,7 +174,6 @@
 ;; is deprecated in 23.2.
 (if (boundp buffer-file-coding-system)
     (setq buffer-file-coding-system 'utf-8)
-  (setq default-buffer-file-coding-system 'utf-8))
 
 ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
 (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
@@ -191,6 +196,20 @@
 (my-setup-indent 2)
 (setq css-indent-offset 2)
 
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+)
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(tab-stop-list (quote (2 4 6 8 10 12 14 16 18 20 22 24 26 28)))))
 (add-hook `scss-mode-hook (my-setup-indent 2))
 
 (custom-set-variables
@@ -202,7 +221,8 @@
  '(org-agenda-files (quote ("~/intrepid/docs/apprentice/diary.org")))
  '(package-selected-packages
    (quote
-    (exec-path-from-shell js2-mode go-mode go-scratch go-snippets go-stacktracer tide flycheck company web-mode ng2-mode editorconfig markdown-mode typescript-mode helm-ag rjsx-mode ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch))))
+    (flymake-sass exec-path-from-shell js2-mode go-mode go-scratch go-snippets go-stacktracer tide flycheck company web-mode ng2-mode editorconfig markdown-mode typescript-mode helm-ag rjsx-mode ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch)))
+ '(tab-stop-list (quote (2 4 6 8 10 12 14 16 18 20 22 24 26 28))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
