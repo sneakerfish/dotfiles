@@ -222,6 +222,26 @@
  '(package-selected-packages
    (quote
     (flymake-sass exec-path-from-shell js2-mode go-mode go-scratch go-snippets go-stacktracer tide flycheck company web-mode ng2-mode editorconfig markdown-mode typescript-mode helm-ag rjsx-mode ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch)))
+ '(projectile-other-file-alist
+   (quote
+    (("cpp" "h" "hpp" "ipp")
+     ("ipp" "h" "hpp" "cpp")
+     ("hpp" "h" "ipp" "cpp" "cc")
+     ("cxx" "h" "hxx" "ixx")
+     ("ixx" "h" "hxx" "cxx")
+     ("hxx" "h" "ixx" "cxx")
+     ("c" "h")
+     ("m" "h")
+     ("mm" "h")
+     ("h" "c" "cc" "cpp" "ipp" "hpp" "cxx" "ixx" "hxx" "m" "mm")
+     ("cc" "h" "hh" "hpp")
+     ("hh" "cc")
+     ("vert" "frag")
+     ("frag" "vert")
+     ("ts" "scss" "html")
+     (nil "lock" "gpg")
+     ("lock" "")
+     ("gpg" ""))))
  '(tab-stop-list (quote (2 4 6 8 10 12 14 16 18 20 22 24 26 28))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -229,3 +249,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;;; .emacs ends here
