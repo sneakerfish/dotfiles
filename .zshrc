@@ -49,13 +49,13 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-extras rails)
+plugins=(git git-extras rails zshmarks)
 
 # User configuration
 
 # export PATH="/home/vagrant/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-export PATH=/usr/local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin;
+export PATH=/usr/local/bin:/usr/local/sbin:/opt/local/bin:/opt/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/Library/TeX/texbin
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -100,17 +100,26 @@ if [ -d $CUSTOM_INIT_SCRIPTS_DIRECTORY ]; then
   done
 fi
 
-# If it exists, load RVM (it *must* be initialized last)
-RVM_SCRIPT=$HOME/.rvm/scripts/rvm;
-if [ -f $RVM_SCRIPT ]; then
-  source $RVM_SCRIPT;
-fi
-
 fpath=(/usr/local/share/zsh-completions $fpath)
+
+# Posgres start and stop
+alias pg-start="launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+alias pg-stop="launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist"
+
+# Redis
+export REDIS_URL=http://127.0.0.1:6379/
 
 # For Zeus
 export DOT_FILES_LOCATION=~
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# this is the root folder where all globally installed node packages will  go
+export NPM_PACKAGES="/usr/local/npm_packages"
+export NODE_PATH=$NODE_PATH:/Users/richard.morello/.asdf/installs/nodejs/9.3.0/.npm/lib/node_modules
+# add to PATH
+export PATH="$NPM_PACKAGES/bin:/usr/local/share/dotnet:$PATH"
+export ASPNETCORE_ENVIRONMENT=Development
+export ConfigurationServiceUri=http://10.24.0.138:8888
+
+. $HOME/.asdf/asdf.sh
+
+. $HOME/.asdf/completions/asdf.bash
