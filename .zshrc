@@ -1,1 +1,1 @@
-/home/rmorello/.zshrc
+/Users/richardmorello/.zshrc
