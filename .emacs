@@ -73,19 +73,9 @@
 (global-set-key (kbd "M-SPC") 'set-mark-command) ; was just-one-space
 (global-set-key (kbd "M-a") 'execute-extended-command) ; was backward-sentence
 
-;; Set a single command to go to the default org file.
-(global-set-key (kbd "C-c o")
-		(lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
-
-;; Org mode stuff: ;; The following lines are always needed.  Choose your own keys.
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-cb" 'org-iswitchb)
-
 (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
 
-(load "~/.emacs.d/my-abbrev.el")
+; (load "~/.emacs.d/my-abbrev.el")
 
 (desktop-save-mode 1)
 
@@ -148,6 +138,17 @@
 ;; Org-mode stuff -- RPM 12-Nov-2017
 ;; set the fall-back font
 
+;; Set a single command to go to the default org file.
+(global-set-key (kbd "C-c o")
+		(lambda () (interactive) (find-file "~/Dropbox/org/notes.org")))
+
+;; Org mode stuff: ;; The following lines are always needed.  Choose your own keys.
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+
 ;; this is critical for displaying various unicode symbols, such as
 ;; those used in my init-org.el settings
 ;; http://endlessparentheses.com/manually-choose-a-fallback-font-for-unicode.html
@@ -157,6 +158,34 @@
 ;; Setting English Font
 (add-hook 'org-mode-hook
           (lambda () (face-remap-add-relative 'default :family "DejaVu Sans Mono for Powerline")))
+
+
+(let* ((variable-tuple
+        (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+              ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+              ((x-list-fonts "Verdana")         '(:font "Verdana"))
+              ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+              (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+  (custom-theme-set-faces
+   'user
+   `(org-level-8 ((t (,@headline ,@variable-tuple))))
+   `(org-level-7 ((t (,@headline ,@variable-tuple))))
+   `(org-level-6 ((t (,@headline ,@variable-tuple))))
+   `(org-level-5 ((t (,@headline ,@variable-tuple))))
+   `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+   `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+   `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+   `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+   `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+
+(custom-theme-set-faces
+ 'user
+ '(variable-pitch ((t (:family "ETBembo" :height 180 :weight thin))))
+ '(fixed-pitch ((t ( :family "Fira Code Retina" :height 160)))))
 
 ;; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
 (setq utf-translate-cjk-mode nil)
@@ -218,7 +247,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
- '(org-agenda-files (quote ("~/intrepid/docs/apprentice/diary.org")))
  '(package-selected-packages
    (quote
     (flymake-sass exec-path-from-shell js2-mode go-mode go-scratch go-snippets go-stacktracer tide flycheck company web-mode ng2-mode editorconfig markdown-mode typescript-mode helm-ag rjsx-mode ag org-bullets ess ess-R-data-view polymode haskell-mode haskell-snippets helm-projectile org-projectile org-projectile-helm multi-web-mode minitest magit helm-rails helm-org-rifle helm-codesearch git-blame dired+ codesearch)))
@@ -248,6 +276,3 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
-
-;;; .emacs ends here
