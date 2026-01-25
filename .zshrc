@@ -7,7 +7,6 @@ ZSH_THEME="robbyrussell"
 # Plugins - timer plugin shows execution time for commands
 plugins=(
   git
-  pyenv
   timer
   z
   extract
@@ -22,9 +21,11 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # Environment variables
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:/usr/local/sbin:/usr/local/opt/mysql-client/bin:$PATH"
-export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+# Pyenv (commented out - using uv instead)
+# export PYENV_ROOT="$HOME/.pyenv"
+# export PATH="$PYENV_ROOT/bin:$PATH"
+# export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
+export PATH="/usr/local/sbin:/usr/local/opt/mysql-client/bin:$PATH"
 
 # Bun
 export BUN_INSTALL="$HOME/.bun"
@@ -34,9 +35,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Aliases
 alias emacs='emacs -nw'
 
-# Pyenv initialization
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+# Pyenv initialization (commented out - using uv instead)
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
 
 # Docker completions
 fpath=(/Users/richardmorello/.docker/completions $fpath)
@@ -61,3 +62,8 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     ssh-add ~/.ssh/id_rsa 2>/dev/null
   fi
 fi
+export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+
+# uv - Python package manager (replaces pyenv/virtualenv)
+. "$HOME/.local/bin/env"
