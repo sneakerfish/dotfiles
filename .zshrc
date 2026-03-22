@@ -20,27 +20,39 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# Detect OS
+case "$(uname -s)" in
+  Darwin)
+    IS_MACOS=true
+    IS_LINUX=false
+    ;;
+  Linux)
+    IS_MACOS=false
+    IS_LINUX=true
+    ;;
+esac
+
 # Environment variables
-# Pyenv (commented out - using uv instead)
-# export PYENV_ROOT="$HOME/.pyenv"
-# export PATH="$PYENV_ROOT/bin:$PATH"
-# export PIPENV_PYTHON="$PYENV_ROOT/shims/python"
-export PATH="/usr/local/sbin:/usr/local/opt/mysql-client/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
+
+# macOS-specific paths
+if $IS_MACOS; then
+  export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+fi
 
 # Bun
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+[ -d "$BUN_INSTALL/bin" ] && export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # Aliases
 alias emacs='emacs -nw'
 
-# Pyenv initialization (commented out - using uv instead)
-# eval "$(pyenv init -)"
-# eval "$(pyenv virtualenv-init -)"
-
-# Docker completions
-fpath=(/Users/richardmorello/.docker/completions $fpath)
+# Docker completions (OS-specific paths)
+if $IS_MACOS; then
+  [ -d "$HOME/.docker/completions" ] && fpath=($HOME/.docker/completions $fpath)
+fi
+# Linux uses system completions in /usr/share/zsh/vendor-completions (auto-loaded)
 autoload -Uz compinit
 compinit
 
@@ -62,8 +74,27 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     ssh-add ~/.ssh/id_rsa 2>/dev/null
   fi
 fi
-export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+
+# Java configuration (OS-specific)
+if $IS_MACOS; then
+  export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+  if command -v /usr/libexec/java_home &> /dev/null; then
+    export JAVA_HOME=$(/usr/libexec/java_home -v 21 2>/dev/null)
+  fi
+elif $IS_LINUX; then
+  # Use Java 21 on Linux (for Jenkins, etc.)
+  if [ -d "/usr/lib/jvm/java-21-openjdk-amd64" ]; then
+    export JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64"
+    export PATH="$JAVA_HOME/bin:$PATH"
+  fi
+fi
 
 # uv - Python package manager (replaces pyenv/virtualenv)
-. "$HOME/.local/bin/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+# Add local bin to PATH
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
+
+# OpenClaw Completion
+source "/home/rmorello/.openclaw/completions/openclaw.zsh"
