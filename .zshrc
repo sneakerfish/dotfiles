@@ -67,3 +67,13 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 
 # uv - Python package manager (replaces pyenv/virtualenv)
 . "$HOME/.local/bin/env"
+export PATH="$HOME/.local/bin:$PATH"
+# uv end
+
+# pnpm
+export PNPM_HOME="/Users/richardmorello/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
