@@ -91,10 +91,19 @@ fi
 
 # uv - Python package manager (replaces pyenv/virtualenv)
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
-
-# Add local bin to PATH
 export PATH="$HOME/.local/bin:$PATH"
+# uv end
+
+# Add npm-global to PATH
 export PATH="$HOME/.npm-global/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/richardmorello/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
 
 # OpenClaw Completion
 source "/home/rmorello/.openclaw/completions/openclaw.zsh"
