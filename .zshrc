@@ -105,5 +105,8 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+# Prefect
+export PREFECT_API_URL=http://richard-ai.local:4200/api
+
 # OpenClaw Completion
 source "/home/rmorello/.openclaw/completions/openclaw.zsh"
