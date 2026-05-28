@@ -33,11 +33,10 @@ case "$(uname -s)" in
 esac
 
 # Environment variables
-export PATH="/usr/local/sbin:$PATH"
 
 # macOS-specific paths
 if $IS_MACOS; then
-  export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+  export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 fi
 
 # Bun
