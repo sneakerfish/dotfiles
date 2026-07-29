@@ -43,3 +43,7 @@ flycheck_*.el
 
 # directory configuration
 .dir-locals.el
+
+# Host-specific endpoints (tailnet addresses). Real values must stay out of this
+# public repo; .dotfiles.local.example is the tracked template.
+.dotfiles.local

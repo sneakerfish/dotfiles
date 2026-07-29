@@ -1,0 +1,23 @@
+# Template for ~/.dotfiles.local — host-specific endpoints, sourced by .zshrc
+# and bin/bench-ollama-gfx.sh. Copy to ~/.dotfiles.local and fill in per machine.
+#
+# This file exists because the values are tailnet addresses and this repo is
+# public. They are not credentials — Tailscale gates on device authorization, so
+# knowing them grants no access — but they identify hosts and shouldn't be
+# published. Keep the real values out of git.
+
+# Prefect API. Prefer a MagicDNS name over .local (IPv6-only, flaky) and over
+# 127.0.0.1 (must be reachable as the same server the worker uses).
+export PREFECT_API_URL=http://HOST.TAILNET.ts.net:4200/api
+
+# Ollama client target. Set this when the daemon binds to something other than
+# localhost, otherwise clients get connection-refused and report ollama as
+# "not installed". NOTE: OLLAMA_HOST is dual-purpose — it is also the bind
+# address for `ollama serve`, so on a machine that serves models locally,
+# pointing this at a remote host will break the local server.
+export OLLAMA_HOST=http://HOST.TAILNET.ts.net:11434
+
+# Linux/ROCm boxes only: server bind address used by bin/bench-ollama-gfx.sh
+# when it rewrites the ollama systemd drop-in. Must be a literal address this
+# host owns — ollama cannot bind a name it does not own — so no MagicDNS here.
+export OLLAMA_BIND_HOST=100.x.y.z:11434

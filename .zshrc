@@ -108,9 +108,10 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-# Prefect — richard-ai over Tailscale (MagicDNS). Not .local (IPv6-only, flaky)
-# and not 127.0.0.1 (must be reachable as the same server the worker uses).
-export PREFECT_API_URL=http://richard-ai.tail62f849.ts.net:4200/api
+# Host-specific endpoints (Prefect, Ollama) live outside this repo, which is
+# public — they are tailnet addresses. Copy .dotfiles.local.example to
+# ~/.dotfiles.local and fill in per machine.
+[ -f "$HOME/.dotfiles.local" ] && source "$HOME/.dotfiles.local"
 
 # OpenClaw Completion (Linux only — not present/exposed on macOS)
 if $IS_LINUX; then
