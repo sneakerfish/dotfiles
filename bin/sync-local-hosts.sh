@@ -41,8 +41,10 @@ build_block() {
     for h in "${HOSTS[@]}"; do
         ip="$(resolve_lan "$h" || true)"
         if [[ -n "$ip" ]]; then
-            printf '%s\t%s%s\t%s\n' "$ip" "$h" "$SUFFIX_DST" "# also resolves bare name"
-            printf '%s\t%s\n' "$ip" "$h"
+            # Only mirror the .local form. The bare name is intentionally
+            # left to Tailscale MagicDNS so it resolves over the tailnet
+            # when away from the home LAN.
+            printf '%s\t%s%s\n' "$ip" "$h" "$SUFFIX_DST"
             resolved=$((resolved + 1))
         else
             printf '# %s%s unresolved at %s\n' "$h" "$SUFFIX_SRC" "$(date -u +%FT%TZ)"
