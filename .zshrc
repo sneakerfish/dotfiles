@@ -97,15 +97,28 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 
 # pnpm
-export PNPM_HOME="/Users/richardmorello/Library/pnpm"
+if $IS_MACOS; then
+  export PNPM_HOME="/Users/richardmorello/Library/pnpm"
+elif $IS_LINUX; then
+  export PNPM_HOME="$HOME/.local/share/pnpm"
+fi
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
 
-# Prefect
-export PREFECT_API_URL=http://richard-ai.local:4200/api
+# Prefect — richard-ai over Tailscale (MagicDNS). Not .local (IPv6-only, flaky)
+# and not 127.0.0.1 (must be reachable as the same server the worker uses).
+export PREFECT_API_URL=http://richard-ai.tail62f849.ts.net:4200/api
 
-# OpenClaw Completion
-source "/home/rmorello/.openclaw/completions/openclaw.zsh"
+# OpenClaw Completion (Linux only — not present/exposed on macOS)
+if $IS_LINUX; then
+  source "/home/rmorello/.openclaw/completions/openclaw.zsh"
+fi
+
+# ROCm (Linux only)
+if $IS_LINUX; then
+  export PATH="/opt/rocm/bin:$PATH"
+  export LD_LIBRARY_PATH="/opt/rocm/lib:$LD_LIBRARY_PATH"
+fi
