@@ -47,6 +47,19 @@ export BUN_INSTALL="$HOME/.bun"
 # Aliases
 alias emacs='emacs -nw'
 
+# Rust CLI replacements — only when installed, so shared hosts don't break.
+# Bypass with `command cat` or `\ls`. Debian/Ubuntu ship bat as `batcat`.
+if command -v bat &> /dev/null; then
+  alias cat='bat --paging=never'
+elif command -v batcat &> /dev/null; then
+  alias cat='batcat --paging=never'
+fi
+if command -v eza &> /dev/null; then
+  alias ls='eza'
+  alias ll='eza -l --git'
+  alias tree='eza --tree'
+fi
+
 # Docker completions (OS-specific paths)
 if $IS_MACOS; then
   [ -d "$HOME/.docker/completions" ] && fpath=($HOME/.docker/completions $fpath)
