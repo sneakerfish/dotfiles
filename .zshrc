@@ -44,6 +44,10 @@ export BUN_INSTALL="$HOME/.bun"
 [ -d "$BUN_INSTALL/bin" ] && export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
+# Rust (rustup installed with --no-modify-path; PATH is managed here so
+# cargo-installed CLIs are visible to the alias checks below)
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+
 # Aliases
 alias emacs='emacs -nw'
 
