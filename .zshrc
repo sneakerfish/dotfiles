@@ -18,19 +18,25 @@ plugins=(
   colored-man-pages
 )
 
-source $ZSH/oh-my-zsh.sh
-
-# Detect OS
+# Detect OS. Default both to false so an unexpected uname never leaves them
+# empty (`if $IS_MACOS` on an empty value runs no command and counts as true).
+IS_MACOS=false
+IS_LINUX=false
 case "$(uname -s)" in
-  Darwin)
-    IS_MACOS=true
-    IS_LINUX=false
-    ;;
-  Linux)
-    IS_MACOS=false
-    IS_LINUX=true
-    ;;
+  Darwin) IS_MACOS=true ;;
+  Linux)  IS_LINUX=true ;;
 esac
+
+# Keep PATH entries unique, so nested shells don't keep growing it.
+typeset -U path PATH
+
+# Docker completions must be on fpath before oh-my-zsh runs compinit.
+# Linux uses system completions in /usr/share/zsh/vendor-completions (auto-loaded).
+if $IS_MACOS; then
+  [ -d "$HOME/.docker/completions" ] && fpath=($HOME/.docker/completions $fpath)
+fi
+
+source $ZSH/oh-my-zsh.sh
 
 # Environment variables
 
@@ -63,14 +69,6 @@ if command -v eza &> /dev/null; then
   alias ll='eza -l --git'
   alias tree='eza --tree'
 fi
-
-# Docker completions (OS-specific paths)
-if $IS_MACOS; then
-  [ -d "$HOME/.docker/completions" ] && fpath=($HOME/.docker/completions $fpath)
-fi
-# Linux uses system completions in /usr/share/zsh/vendor-completions (auto-loaded)
-autoload -Uz compinit
-compinit
 
 # SSH Agent - start once per session and cache key
 if [ -z "$SSH_AUTH_SOCK" ]; then
@@ -115,7 +113,7 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 
 # pnpm
 if $IS_MACOS; then
-  export PNPM_HOME="/Users/richardmorello/Library/pnpm"
+  export PNPM_HOME="$HOME/Library/pnpm"
 elif $IS_LINUX; then
   export PNPM_HOME="$HOME/.local/share/pnpm"
 fi
@@ -131,12 +129,14 @@ esac
 [ -f "$HOME/.dotfiles.local" ] && source "$HOME/.dotfiles.local"
 
 # OpenClaw Completion (Linux only — not present/exposed on macOS)
-if $IS_LINUX; then
-  source "/home/rmorello/.openclaw/completions/openclaw.zsh"
+if $IS_LINUX && [ -f "$HOME/.openclaw/completions/openclaw.zsh" ]; then
+  source "$HOME/.openclaw/completions/openclaw.zsh"
 fi
 
 # ROCm (Linux only)
-if $IS_LINUX; then
+# Only append the old value when it's set: a trailing ":" would add the
+# current directory to the library search path.
+if $IS_LINUX && [ -d /opt/rocm ]; then
   export PATH="/opt/rocm/bin:$PATH"
-  export LD_LIBRARY_PATH="/opt/rocm/lib:$LD_LIBRARY_PATH"
+  export LD_LIBRARY_PATH="/opt/rocm/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 fi
