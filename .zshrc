@@ -56,6 +56,8 @@ export BUN_INSTALL="$HOME/.bun"
 
 # Aliases
 alias emacs='emacs -nw'
+export EDITOR='emacs -nw'
+export VISUAL="$EDITOR"
 
 # Rust CLI replacements — only when installed, so shared hosts don't break.
 # Bypass with `command cat` or `\ls`. Debian/Ubuntu ship bat as `batcat`.

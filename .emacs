@@ -1,4 +1,4 @@
-;;; .emacs -- Personal Emacs configuration
+;;; .emacs -- Personal Emacs configuration  -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 
