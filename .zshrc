@@ -140,3 +140,12 @@ if $IS_LINUX && [ -d /opt/rocm ]; then
   export PATH="/opt/rocm/bin:$PATH"
   export LD_LIBRARY_PATH="/opt/rocm/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 fi
+
+# eMudhra CA compromise (2026-10-21): macOS /etc/ssl/cert.pem still trusts the
+# compromised chains. Prefer Homebrew curl and point OpenSSL/LibreSSL tools at
+# Homebrew's patched bundle. Remove once Apple updates /etc/ssl/cert.pem.
+if $IS_MACOS && [ -f /opt/homebrew/etc/ca-certificates/cert.pem ]; then
+  export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+  export SSL_CERT_FILE=/opt/homebrew/etc/ca-certificates/cert.pem
+  export CURL_CA_BUNDLE=$SSL_CERT_FILE
+fi
