@@ -10,6 +10,5 @@ if [[ $- == *i* ]] && command -v zsh >/dev/null 2>&1; then
   exec zsh
 fi
 
-
 # Added by Antigravity CLI installer
-export PATH="/Users/richardmorello/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
