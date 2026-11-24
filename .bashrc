@@ -9,3 +9,7 @@ export PREFECT_API_URL=http://richard-ai.local:4200/api
 if [[ $- == *i* ]] && command -v zsh >/dev/null 2>&1; then
   exec zsh
 fi
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/richardmorello/.local/bin:$PATH"
