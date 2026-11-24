@@ -125,6 +125,42 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+# fzf key bindings (Ctrl-R history, Ctrl-T file picker, Alt-C cd) — only when
+# installed. `fzf --zsh` needs fzf 0.48+; older Debian/Ubuntu packages ship the
+# bindings as a file instead.
+if command -v fzf &> /dev/null; then
+  if fzf --zsh &> /dev/null; then
+    source <(fzf --zsh)
+  elif [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+  fi
+
+  # Build fzf's file and directory lists with fd, which skips .gitignore'd
+  # paths. Debian/Ubuntu ship fd as `fdfind`.
+  _fzf_fd=""
+  if command -v fd &> /dev/null; then
+    _fzf_fd=fd
+  elif command -v fdfind &> /dev/null; then
+    _fzf_fd=fdfind
+  fi
+  if [ -n "$_fzf_fd" ]; then
+    export FZF_DEFAULT_COMMAND="$_fzf_fd --type f --hidden --exclude .git"
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND="$_fzf_fd --type d --hidden --exclude .git"
+  fi
+  unset _fzf_fd
+
+  # Previews: file contents beside Ctrl-T, a directory tree beside Alt-C.
+  if command -v bat &> /dev/null; then
+    export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+  elif command -v batcat &> /dev/null; then
+    export FZF_CTRL_T_OPTS="--preview 'batcat --color=always --style=numbers --line-range=:200 {}'"
+  fi
+  if command -v eza &> /dev/null; then
+    export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --color=always {}'"
+  fi
+fi
+
 # Host-specific endpoints (Prefect, Ollama) live outside this repo, which is
 # public — they are tailnet addresses. Copy .dotfiles.local.example to
 # ~/.dotfiles.local and fill in per machine.
