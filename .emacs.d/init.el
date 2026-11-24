@@ -50,6 +50,14 @@
   :ensure t
   :bind ("C-x g" . magit-status))
 
+;; --- Rex: M-x rexel for a shell in a Rex session, M-x rexel-attach to pick
+;; a running one. Each Rex terminal becomes a Ghostel buffer. Rexel is not on
+;; MELPA yet, so it comes from its repository.
+(use-package ghostel :ensure t)
+(use-package websocket :ensure t)
+(use-package rexel
+  :vc (:url "https://github.com/dakra/rexel"))
+
 ;; --- Org ---
 (setq org-directory "~/org")
 (setq org-default-notes-file (expand-file-name "inbox.org" org-directory))
