@@ -187,7 +187,3 @@ if $IS_MACOS && [ -f /opt/homebrew/etc/ca-certificates/cert.pem ]; then
   export SSL_CERT_FILE=/opt/homebrew/etc/ca-certificates/cert.pem
   export CURL_CA_BUNDLE=$SSL_CERT_FILE
 fi
-
-
-# Added by Antigravity CLI installer
-export PATH="/Users/richardmorello/.local/bin:$PATH"
